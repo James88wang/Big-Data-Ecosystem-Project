@@ -1,0 +1,5 @@
+outs:
+- md5: ae1e5f5c1fb46e8a85facf500253b0db.dir
+  size: 28910
+  nfiles: 30
+  path: DT_model
