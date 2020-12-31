@@ -53,7 +53,7 @@ f1 = modelLR.summary.weightedFMeasure()
 
 if not os.path.exists(loc+'/scores'):
 	os.mkdir(loc+'/scores')
-with open(loc+'/scores/metricsLR.json', 'w') as fd:
+with open(loc+'/scores/metrics.json', 'w') as fd:
 	json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
 
 modelLR.write().overwrite().save(loc+'/models/LR_model')

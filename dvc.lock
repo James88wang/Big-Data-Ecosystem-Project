@@ -1,10 +1,10 @@
 train:
-  cmd: py .\src\4.train_gradient_boosted.py
+  cmd: py .\src\1.train_logistic_regression.py
   deps:
   - path: data/creditcard.csv
     md5: e90efcb83d69faf99fcab8b0255024de
     size: 150828752
   outs:
-  - path: scores/metricsGB.json
-    md5: 45a6bef29154977ed5711abd923d7a80
+  - path: scores/metrics.json
+    md5: add4e1f4f33050579fcc982ad6a31cb5
     size: 119

@@ -58,7 +58,7 @@ f1 = evaluator.evaluate(predictionsGB)
 
 if not os.path.exists(loc+'/scores'):
 	os.mkdir(loc+'/scores')
-with open(loc+'/scores/metricsGB.json', 'w') as fd:
+with open(loc+'/scores/metrics.json', 'w') as fd:
     json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
 
 modelGB.write().overwrite().save(loc+'/models/GB_model')

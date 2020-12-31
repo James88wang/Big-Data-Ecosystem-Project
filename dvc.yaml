@@ -1,8 +1,8 @@
 stages:
   train:
-    cmd: py .\src\4.train_gradient_boosted.py
+    cmd: py .\src\1.train_logistic_regression.py
     deps:
     - data/creditcard.csv
     metrics:
-    - scores/metricsGB.json:
+    - scores/metrics.json:
         cache: false
