@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: py .\src\3.train_random_forest.py
+    cmd: py .\src\4.train_gradient_boosted.py
     deps:
     - data/creditcard.csv
     metrics:

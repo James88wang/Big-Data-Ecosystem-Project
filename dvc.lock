@@ -1,10 +1,10 @@
 train:
-  cmd: py .\src\3.train_random_forest.py
+  cmd: py .\src\4.train_gradient_boosted.py
   deps:
   - path: data/creditcard.csv
     md5: e90efcb83d69faf99fcab8b0255024de
     size: 150828752
   outs:
   - path: scores/metrics.json
-    md5: 52f54dcb3f86ace5bb7dd1ddcea9fd0b
-    size: 120
+    md5: 48b4452818be2e949875eee101e3bb73
+    size: 121
