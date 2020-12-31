@@ -7,12 +7,11 @@ from pyspark.ml.classification import GBTClassifier
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 import os
 from os.path import isfile, join
+import json
 
 spark = SparkSession.builder.getOrCreate()
 
-
-
-loc = os.path.abspath("")
+loc = os.path.abspath("../")
 data_loc = f"{loc}/data/creditcard.csv"
 
 
@@ -41,13 +40,28 @@ predictionsGB = modelGB.transform(test)
 
 predictionsGB.select("prediction", "Class", "features").show(5)
 
-evaluatorGB = MulticlassClassificationEvaluator(
+evaluator = MulticlassClassificationEvaluator(
     labelCol="Class", predictionCol="prediction", metricName="accuracy")
-accuracyGB = evaluatorGB.evaluate(predictionsGB)
+accuracy = evaluator.evaluate(predictionsGB)
 
-evaluatorGB.save('metric/metricGB')
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="weightedPrecision")
+precision = evaluator.evaluate(predictionsGB)
 
-modelGB.write().overwrite().save('models/GB_model')
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="weightedRecall")
+recall = evaluator.evaluate(predictionsGB)
+
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="f1")
+f1 = evaluator.evaluate(predictionsGB)
+
+if not os.path.exists('../scores'):
+	os.mkdir('../scores')
+with open('../scores/metricsGB.json', 'w') as fd:
+    json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
+
+modelGB.write().overwrite().save('../models/GB_model')
 
 
 

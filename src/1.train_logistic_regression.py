@@ -1,17 +1,16 @@
-# %load_ext nb_black
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
 import pyspark.sql.types as T
 from pyspark.ml import Pipeline
 from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.feature import VectorAssembler
 import os
 from os.path import isfile, join
+import json
 
 spark = SparkSession.builder.getOrCreate()
 
-
-
-loc = os.path.abspath("")
+loc = os.path.abspath("../")
 data_loc = f"{loc}/data/creditcard.csv"
 
 
@@ -22,7 +21,6 @@ df = df.select('Time','V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10
 
 train, test = df.randomSplit([0.8, 0.2], seed=7)
 
-from pyspark.ml.feature import VectorAssembler
 
 columns = [x for x in df.columns if x != 'Class']
 
@@ -48,7 +46,17 @@ data = data.withColumnRenamed('Class','label')
 
 modelLR = LogisticRegression().fit(data)
 
-modelLR.write().overwrite().save('models/LR_model')
+accuracy = modelLR.summary.accuracy
+precision = modelLR.summary.weightedPrecision
+recall = modelLR.summary.weightedRecall
+f1 = modelLR.summary.weightedFMeasure()
+
+if not os.path.exists('../scores'):
+	os.mkdir('../scores')
+with open('../scores/metricsLR.json', 'w') as fd:
+	json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
+
+modelLR.write().overwrite().save('../models/LR_model')
 
 
 

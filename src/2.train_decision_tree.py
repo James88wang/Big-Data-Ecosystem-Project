@@ -7,12 +7,11 @@ from pyspark.ml.classification import DecisionTreeClassifier
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 import os
 from os.path import isfile, join
+import json
 
 spark = SparkSession.builder.getOrCreate()
 
-
-
-loc = os.path.abspath("")
+loc = os.path.abspath("../")
 data_loc = f"{loc}/data/creditcard.csv"
 
 
@@ -41,13 +40,30 @@ predictionsDT = modelDT.transform(test)
 
 predictionsDT.select("prediction", "Class", "features").show(5)
 
-evaluatorDT = MulticlassClassificationEvaluator(
+
+evaluator = MulticlassClassificationEvaluator(
     labelCol="Class", predictionCol="prediction", metricName="accuracy")
-accuracyDT = evaluatorDT.evaluate(predictionsDT)
+accuracy = evaluator.evaluate(predictionsDT)
 
-evaluatorDT.save('metrics/metricDT')
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="weightedPrecision")
+precision = evaluator.evaluate(predictionsDT)
 
-modelDT.write().overwrite().save('models/DT_model')
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="weightedRecall")
+recall = evaluator.evaluate(predictionsDT)
+
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="f1")
+f1 = evaluator.evaluate(predictionsDT)
+
+if not os.path.exists('../scores'):
+	os.mkdir('../scores')
+with open('../scores/metricsDT.json', 'w') as fd:
+    json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
+
+
+modelDT.write().overwrite().save('../models/DT_model')
 
 
 

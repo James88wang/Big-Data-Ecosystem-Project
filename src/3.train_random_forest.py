@@ -7,12 +7,11 @@ from pyspark.ml.classification import RandomForestClassifier
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 import os
 from os.path import isfile, join
+import json
 
 spark = SparkSession.builder.getOrCreate()
 
-
-
-loc = os.path.abspath("")
+loc = os.path.abspath("../")
 data_loc = f"{loc}/data/creditcard.csv"
 
 
@@ -41,14 +40,28 @@ predictionsRF = modelRF.transform(test)
 
 predictionsRF.select("prediction", "Class", "features").show(5)
 
-evaluatorRF = MulticlassClassificationEvaluator(
+evaluator = MulticlassClassificationEvaluator(
     labelCol="Class", predictionCol="prediction", metricName="accuracy")
-accuracyRF = evaluatorRF.evaluate(predictionsRF)
+accuracy = evaluator.evaluate(predictionsRF)
 
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="weightedPrecision")
+precision = evaluator.evaluate(predictionsRF)
 
-evaluatorRF.save('metrics/metricRF')
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="weightedRecall")
+recall = evaluator.evaluate(predictionsRF)
 
-modelRF.write().overwrite().save('models/RF_model')
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="Class", predictionCol="prediction", metricName="f1")
+f1 = evaluator.evaluate(predictionsRF)
+
+if not os.path.exists('../scores'):
+	os.mkdir('../scores')
+with open('../scores/metricsRF.json', 'w') as fd:
+    json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
+
+modelRF.write().overwrite().save('../models/RF_model')
 
 
 
