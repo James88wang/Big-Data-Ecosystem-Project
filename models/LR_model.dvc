@@ -1,0 +1,5 @@
+outs:
+- md5: c60ce893829575368a3b06cafff975bd.dir
+  size: 4954
+  nfiles: 8
+  path: LR_model

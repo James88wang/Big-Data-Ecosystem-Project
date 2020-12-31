@@ -1,0 +1,10 @@
+train:
+  cmd: py .\src\1.train_logistic_regression.py
+  deps:
+  - path: data/creditcard.csv
+    md5: e90efcb83d69faf99fcab8b0255024de
+    size: 150828752
+  outs:
+  - path: scores/metricsLR.json
+    md5: add4e1f4f33050579fcc982ad6a31cb5
+    size: 119

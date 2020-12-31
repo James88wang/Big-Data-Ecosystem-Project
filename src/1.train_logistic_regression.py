@@ -10,7 +10,7 @@ import json
 
 spark = SparkSession.builder.getOrCreate()
 
-loc = os.path.abspath("../")
+loc = os.path.abspath("")
 data_loc = f"{loc}/data/creditcard.csv"
 
 
@@ -51,12 +51,12 @@ precision = modelLR.summary.weightedPrecision
 recall = modelLR.summary.weightedRecall
 f1 = modelLR.summary.weightedFMeasure()
 
-if not os.path.exists('../scores'):
-	os.mkdir('../scores')
-with open('../scores/metricsLR.json', 'w') as fd:
+if not os.path.exists(loc+'/scores'):
+	os.mkdir(loc+'/scores')
+with open(loc+'/scores/metricsLR.json', 'w') as fd:
 	json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
 
-modelLR.write().overwrite().save('../models/LR_model')
+modelLR.write().overwrite().save(loc+'/models/LR_model')
 
 
 
