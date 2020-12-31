@@ -1,8 +1,8 @@
 stages:
   train:
-    cmd: py .\src\2.train_decision_tree.py
+    cmd: py .\src\3.train_random_forest.py
     deps:
     - data/creditcard.csv
     metrics:
-    - scores/metricsDT.json:
+    - scores/metricsRF.json:
         cache: false
