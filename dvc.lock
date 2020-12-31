@@ -1,10 +1,10 @@
 train:
-  cmd: py .\src\2.train_decision_tree.py
+  cmd: py .\src\3.train_random_forest.py
   deps:
   - path: data/creditcard.csv
     md5: e90efcb83d69faf99fcab8b0255024de
     size: 150828752
   outs:
   - path: scores/metrics.json
-    md5: 58da6f93d2ea95f49f74e56760caaeef
-    size: 121
+    md5: 52f54dcb3f86ace5bb7dd1ddcea9fd0b
+    size: 120
