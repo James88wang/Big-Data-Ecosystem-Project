@@ -11,7 +11,7 @@ import json
 
 spark = SparkSession.builder.getOrCreate()
 
-loc = os.path.abspath("../")
+loc = os.path.abspath("")
 data_loc = f"{loc}/data/creditcard.csv"
 
 
@@ -56,12 +56,12 @@ evaluator = MulticlassClassificationEvaluator(
     labelCol="Class", predictionCol="prediction", metricName="f1")
 f1 = evaluator.evaluate(predictionsGB)
 
-if not os.path.exists('../scores'):
-	os.mkdir('../scores')
-with open('../scores/metricsGB.json', 'w') as fd:
+if not os.path.exists(loc+'/scores'):
+	os.mkdir(loc+'/scores')
+with open(loc+'/scores/metricsGB.json', 'w') as fd:
     json.dump({'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}, fd)
 
-modelGB.write().overwrite().save('../models/GB_model')
+modelGB.write().overwrite().save(loc+'/models/GB_model')
 
 
 
